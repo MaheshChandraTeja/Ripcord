@@ -1,0 +1,30 @@
+{
+  "Serilog": {
+    "Using": [ "Serilog.Sinks.File", "Serilog.Sinks.Debug" ],
+    "MinimumLevel": {
+      "Default": "Information",
+      "Override": {
+        "Microsoft": "Warning",
+        "System": "Warning"
+      }
+    },
+    "WriteTo": [
+      {
+        "Name": "File",
+        "Args": {
+          "path": "C:\\ProgramData\\Ripcord\\Logs\\serilog-.log",
+          "rollingInterval": "Day",
+          "retainedFileCountLimit": 10,
+          "fileSizeLimitBytes": 33554432,
+          "rollOnFileSizeLimit": true,
+          "shared": true
+        }
+      },
+      { "Name": "Debug" }
+    ],
+    "Enrich": [ "FromLogContext" ],
+    "Properties": {
+      "App": "Ripcord"
+    }
+  }
+}

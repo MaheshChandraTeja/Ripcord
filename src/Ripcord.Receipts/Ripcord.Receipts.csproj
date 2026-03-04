@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <AssemblyName>Ripcord.Receipts</AssemblyName>
+    <RootNamespace>Ripcord.Receipts</RootNamespace>
+    <LangVersion>latest</LangVersion>
+    
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- System.Text.Json is in-box on .NET 8; explicit for clarity/pinning if desired -->
+    <PackageReference Include="Serilog.Sinks.Debug" Version="3.0.0" />
+    <PackageReference Include="System.Text.Json" Version="8.0.6" />
+  </ItemGroup>
+
+</Project>
+

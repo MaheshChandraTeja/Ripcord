@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/schemas/ripcord/receipt.schema.json",
+  "title": "Ripcord Receipt",
+  "type": "object",
+  "required": ["schemaVersion","jobId","createdUtc","startedUtc","completedUtc","machine","user","profileId","profileName","dryRun","stats","items"],
+  "properties": {
+    "schemaVersion": { "type": "string", "const": "1.0" },
+    "jobId": { "type": "string", "pattern": "^[0-9a-fA-F-]{36}$" },
+    "createdUtc": { "type": "string", "format": "date-time" },
+    "startedUtc": { "type": "string", "format": "date-time" },
+    "completedUtc": { "type": "string", "format": "date-time" },
+    "machine": { "type": "string", "minLength": 1 },
+    "user": { "type": "string", "minLength": 1 },
+    "profileId": { "type": "string", "minLength": 1 },
+    "profileName": { "type": "string", "minLength": 1 },
+    "dryRun": { "type": "boolean" },
+    "stats": {
+      "type": "object",
+      "required": ["filesProcessed","filesFailed","filesDeleted","bytesOverwritten"],
+      "properties": {
+        "filesProcessed": { "type": "integer", "minimum": 0 },
+        "filesFailed": { "type": "integer", "minimum": 0 },
+        "filesDeleted": { "type": "integer", "minimum": 0 },
+        "bytesOverwritten": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "items": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["path","sizeBytes","deleted","passes","adsBefore","adsAfter"],
+        "properties": {
+          "path": { "type": "string", "minLength": 1 },
+          "sizeBytes": { "type": "integer", "minimum": 0 },
+          "deleted": { "type": "boolean" },
+          "passes": { "type": "integer", "minimum": 0 },
+          "adsBefore": { "type": "integer", "minimum": -1 },
+          "adsAfter": { "type": "integer", "minimum": -1 },
+          "verificationOk": { "type": ["boolean","null"] }
+        }
+      }
+    },
+    "journalFiles": { "type": ["array","null"], "items": { "type": "string" } },
+    "freeSpace": {
+      "type": ["object","null"],
+      "required": ["volume","bytesWritten","filesCreated","trimAttempted"],
+      "properties": {
+        "volume": { "type": "string" },
+        "bytesWritten": { "type": "integer", "minimum": 0 },
+        "filesCreated": { "type": "integer", "minimum": 0 },
+        "trimAttempted": { "type": "boolean" }
+      }
+    },
+    "notes": { "type": ["array","null"], "items": { "type": "string" } }
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,53 @@
+<Project>
+  <!-- Shared defaults for ALL projects -->
+  <PropertyGroup>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Deterministic>true</Deterministic>
+    <DebugType>portable</DebugType>
+
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <AnalysisLevel>latest-all</AnalysisLevel>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <NoWarn>$(NoWarn);CS1591;CS1570;CA1305;CA1308;CA1062;CA1805</NoWarn>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+
+    <!-- CI metadata -->
+    <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true' Or '$(TF_BUILD)' == 'true'">true</ContinuousIntegrationBuild>
+
+    <!-- Repo metadata -->
+    <Company>Ripcord</Company>
+    <Authors>Ripcord</Authors>
+    <RepositoryUrl>https://example.com/ripcord</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+  </PropertyGroup>
+
+  <!-- Apps/CLI ONLY: RIDs + release publish knobs -->
+  <PropertyGroup Condition="'$(IsAppProject)'=='true'">
+    <!-- Valid on .NET 8 -->
+    <RuntimeIdentifiers>win-x64;win-arm64;win-x86</RuntimeIdentifiers>
+
+    <!-- Release-only publish settings (projects may override) -->
+    <Optimize Condition="'$(Configuration)' == 'Release'">true</Optimize>
+    <PublishReadyToRun Condition="'$(Configuration)' == 'Release'">true</PublishReadyToRun>
+    <PublishSingleFile Condition="'$(Configuration)' == 'Release'">false</PublishSingleFile>
+  </PropertyGroup>
+
+  <!-- Libraries & tests: explicitly RID-less -->
+  <PropertyGroup Condition="'$(IsAppProject)'!='true'">
+    <RuntimeIdentifier></RuntimeIdentifier>
+    <RuntimeIdentifiers></RuntimeIdentifiers>
+    <SelfContained>false</SelfContained>
+    <PublishAot>false</PublishAot>
+  </PropertyGroup>
+
+  <!-- Only apps ship local config alongside binaries -->
+  <ItemGroup Condition="'$(IsAppProject)'=='true'">
+    <Content Include="$(MSBuildThisFileDirectory)config\*.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Link>config\%(Filename)%(Extension)</Link>
+    </Content>
+  </ItemGroup>
+</Project>

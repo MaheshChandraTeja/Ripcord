@@ -1,0 +1,47 @@
+# Visual Studio / .NET
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+[Bb]in/
+[Oo]bj/
+TestResults/
+*.nupkg
+.nuget/
+packages/
+artifacts/
+*.deps.json
+*.pdb
+*.cache
+*.log
+*.tlog
+
+# MSIX build outputs
+AppPackages/
+*.msix
+*.msixbundle
+*.appx
+*.appxbundle
+*.appxupload
+
+# Rider / VS Code
+.idea/
+.vscode/
+
+# OS junk
+Thumbs.db
+.DS_Store
+
+# Generated reports/templates copies
+src/Ripcord.App/reports/
+src/Ripcord.CLI/reports/
+
+# Telemetry/logs
+C:/ProgramData/Ripcord/Logs/
+C:/ProgramData/Ripcord/Telemetry/
+
+# Coverage
+coverage/
+*.coverage
+*.coveragexml

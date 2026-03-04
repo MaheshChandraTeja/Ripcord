@@ -1,0 +1,52 @@
+<Page
+    x:Class="Ripcord.App.Views.ReceiptsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:vm="using:Ripcord.App.ViewModels">
+
+    <Page.DataContext>
+        <vm:ReceiptsViewModel />
+    </Page.DataContext>
+
+    <Grid Padding="12" RowSpacing="8">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal" Spacing="8">
+            <TextBox Width="520" Header="Receipts Folder" Text="{Binding RootFolder, Mode=TwoWay}" />
+            <Button Content="Browse…" Click="OnBrowse"/>
+            <Button Content="Refresh" Command="{Binding RefreshCommand}"/>
+            <Button Content="Export PDF/HTML" Command="{Binding ExportCommand}" IsEnabled="{Binding CanExport}"/>
+            <Button Content="Verify" Command="{Binding VerifyCommand}" IsEnabled="{Binding CanVerify}"/>
+        </StackPanel>
+
+        <ListView Grid.Row="1" ItemsSource="{Binding Items}" SelectionMode="Single" SelectedItem="{Binding Selected, Mode=TwoWay}">
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="vm:ReceiptsViewModel+ReceiptItem">
+                    <Grid Padding="6" ColumnSpacing="12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="220"/>
+                            <ColumnDefinition Width="220"/>
+                            <ColumnDefinition Width="160"/>
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel>
+                            <TextBlock Text="{x:Bind Title}"/>
+                            <TextBlock Text="{x:Bind Subtitle}" FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                        </StackPanel>
+
+                        <TextBlock Grid.Column="1" Text="{x:Bind Profile}" />
+                        <TextBlock Grid.Column="2" Text="{x:Bind HashShort}" />
+                        <TextBlock Grid.Column="3" Text="{x:Bind VerifiedDisplay}" />
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <TextBlock Grid.Row="2" Text="{Binding Footer}" />
+    </Grid>
+</Page>

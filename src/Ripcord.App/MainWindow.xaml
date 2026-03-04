@@ -1,0 +1,24 @@
+<Window
+    x:Class="Ripcord.App.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Ripcord.App"
+    xmlns:views="using:Ripcord.App.Views"
+    Title="Ripcord"
+    Width="1100" Height="720"
+    >
+
+    <NavigationView x:Name="Nav"
+                    IsSettingsVisible="False"
+                    PaneDisplayMode="Left"
+                    SelectionChanged="OnNavSelectionChanged">
+        <NavigationView.MenuItems>
+        <NavigationViewItem Content="Jobs" Icon="Play" Tag="jobs" />
+        <NavigationViewItem Content="Free Space" Icon="Delete" Tag="free" />
+        <NavigationViewItem Content="Shadow Purge" Icon="Trash" Tag="vss" />
+        <NavigationViewItem Content="Receipts" Icon="Document" Tag="receipts" />
+        <NavigationViewItem Content="Settings" Icon="Setting" Tag="settings" />
+        </NavigationView.MenuItems>
+        <Frame x:Name="ContentFrame" />
+    </NavigationView>
+</Window>

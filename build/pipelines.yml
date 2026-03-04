@@ -1,0 +1,74 @@
+name: Ripcord CI
+
+on:
+  push:
+    branches: [ main, master ]
+    tags: [ "v*" ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    env:
+      DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+      DOTNET_NOLOGO: true
+      GH_PACKAGES_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
+      SIGNING_CERT_THUMBPRINT: ${{ secrets.SIGNING_CERT_THUMBPRINT }}
+      SIGNING_PFX: ${{ secrets.SIGNING_PFX }}
+      SIGNING_PFX_PASSWORD: ${{ secrets.SIGNING_PFX_PASSWORD }}
+      TIMESTAMP_URL: "http://timestamp.digicert.com"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
+      - name: Dotnet Info
+        run: dotnet --info
+
+      - name: Restore
+        run: dotnet restore --configfile NuGet.config
+
+      - name: Compute Version
+        shell: pwsh
+        run: |
+          $v = ./build/versioning.ps1
+          echo "APP_VERSION=$v" | Out-File -FilePath $env:GITHUB_ENV -Append
+          echo "Computed version: $v"
+
+      - name: Build (Release)
+        run: dotnet build -c Release -p:Version=${{ env.APP_VERSION }} -p:InformationalVersion=${{ env.APP_VERSION }} --no-restore
+
+      - name: Test
+        run: dotnet test -c Release --no-build --logger "trx;LogFileName=results.trx" --collect:"XPlat Code Coverage"
+
+      - name: Publish App (win-x64)
+        run: dotnet publish src/Ripcord.App/Ripcord.App.csproj -c Release -r win-x64 --self-contained false -p:Version=${{ env.APP_VERSION }} -o out/win-x64
+
+      - name: Package & (optionally) Sign MSIX
+        shell: pwsh
+        run: |
+          ./build/sign-msix.ps1 `
+            -AppExeDir "out/win-x64" `
+            -Manifest "installers/msix/Package.appxmanifest" `
+            -OutDir "out/msix" `
+            -Version "${{ env.APP_VERSION }}" `
+            -TimestampUrl "${{ env.TIMESTAMP_URL }}" `
+            -CertThumbprint "${{ env.SIGNING_CERT_THUMBPRINT }}" `
+            -PfxFile "${{ env.SIGNING_PFX }}" `
+            -PfxPassword "${{ env.SIGNING_PFX_PASSWORD }}"
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ripcord-artifacts
+          path: |
+            out/win-x64/**
+            out/msix/**
+            **/TestResults/**

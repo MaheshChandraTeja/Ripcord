@@ -1,0 +1,38 @@
+# Winget singleton manifest (example). Replace placeholder values before publishing.
+# See: https://learn.microsoft.com/windows/package-manager/package/manifest
+PackageIdentifier: Contoso.Ripcord
+PackageVersion: 1.0.0
+PackageName: Ripcord
+Publisher: Contoso Ltd.
+PublisherUrl: https://contoso.example
+PublisherSupportUrl: https://contoso.example/support
+Author: Contoso Engineering
+Moniker: ripcord
+License: MIT
+LicenseUrl: https://example.com/ripcord/license
+ShortDescription: Secure data erasure with receipts and optional elevated broker.
+Description: |
+  Ripcord provides verifiable file erasure, VSS snapshot purging, and free-space wiping.
+  It generates canonical JSON receipts with optional signatures and exports to PDF/HTML.
+Tags:
+  - security
+  - erasure
+  - forensics
+  - privacy
+ReleaseNotesUrl: https://example.com/ripcord/releases
+# MSIX installer entries (x64 and ARM64)
+Installers:
+  - Architecture: x64
+    InstallerType: msix
+    InstallerUrl: https://example.com/downloads/Ripcord.App_1.0.0_x64.msixbundle
+    InstallerSha256: REPLACE_WITH_SHA256
+    PackageFamilyName: Contoso.Ripcord_1234567890abc
+    MinimumOSVersion: 10.0.19041.0
+  - Architecture: arm64
+    InstallerType: msix
+    InstallerUrl: https://example.com/downloads/Ripcord.App_1.0.0_arm64.msixbundle
+    InstallerSha256: REPLACE_WITH_SHA256
+    PackageFamilyName: Contoso.Ripcord_1234567890abc
+    MinimumOSVersion: 10.0.19041.0
+ManifestType: singleton
+ManifestVersion: 1.6.0

@@ -1,0 +1,60 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
+    <UseWPF>false</UseWPF>
+    <UseWindowsForms>false</UseWindowsForms>
+    <EnableDefaultItems>true</EnableDefaultItems>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>Ripcord.App</RootNamespace>
+    <AssemblyName>Ripcord.App</AssemblyName>
+    <Platforms>x64;ARM64</Platforms>
+    <OutputType>WinExe</OutputType>
+    
+    <IsAppProject>true</IsAppProject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- WinAppSDK / WinUI 3 -->
+    <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.5.240802000" />
+    <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.1" PrivateAssets="all" />
+    <PackageReference Include="Serilog" Version="4.3.0" />
+    <PackageReference Include="Serilog.Sinks.Debug" Version="3.0.0" />
+    <PackageReference Include="System.Text.Json" Version="8.0.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Ripcord.Engine\Ripcord.Engine.csproj" />
+    <ProjectReference Include="..\Ripcord.Infrastructure\Ripcord.Infrastructure.csproj" />
+    <ProjectReference Include="..\Ripcord.Receipts\Ripcord.Receipts.csproj" />
+  </ItemGroup>
+
+  <!-- Native helper DLL gets copied next to the app if present -->
+  <ItemGroup>
+    <Content Include="..\Ripcord.Engine.Native\bin\$(Configuration)\$(Platform)\Ripcord.Engine.Native.dll">
+      <Link>Ripcord.Engine.Native.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Visible>false</Visible>
+    </Content>
+  </ItemGroup>
+
+  <!-- Ship report templates with the app -->
+  <ItemGroup>
+    <Content Include="..\..\reports\templates\*.json">
+      <Link>reports\templates\%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\reports\schemas\receipt.schema.json">
+      <Link>reports\schemas\receipt.schema.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\config\*.json">
+      <Link>config\%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+</Project>
+
+

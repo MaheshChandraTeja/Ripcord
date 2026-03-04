@@ -1,0 +1,16 @@
+<Project>
+  <!-- AfterBuild: print effective version and artifact path -->
+  <Target Name="Ripcord_AfterBuild" AfterTargets="Build">
+    <Message Importance="High" Text="Built $(MSBuildProjectName) $(Configuration) → $(TargetPath)" />
+    <Message Importance="High" Text="Version: $(Version) | InformationalVersion: $(InformationalVersion)" />
+  </Target>
+
+  <!-- Test runs should emit trx + coverage when under CI -->
+  <Target Name="Ripcord_TestDefaults" BeforeTargets="VSTest" Condition="'$(ContinuousIntegrationBuild)' == 'true'">
+    <PropertyGroup>
+      <CollectCoverage>true</CollectCoverage>
+      <CoverletOutputFormat>cobertura</CoverletOutputFormat>
+      <CoverletOutput>$(MSBuildProjectDirectory)\TestResults\coverage.xml</CoverletOutput>
+    </PropertyGroup>
+  </Target>
+</Project>
