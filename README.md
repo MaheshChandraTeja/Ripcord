@@ -367,5 +367,5 @@ https://www.kairais.com
 
 ## 📄 License
 
-Vyre is proprietary software.  
+Ripcord is proprietary software.  
 Third‑party dependencies are licensed under their respective terms and used in compliance.
